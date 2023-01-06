@@ -1,0 +1,322 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Roulette Request Schema",
+    "description": "This schema is used to make requests of the roulette engine.",
+    "type": "object",
+    "properties": {
+        "wheel": {
+            "default": "European",
+            "enum": [
+                "American",
+                "European"
+            ]
+        },
+        "hash": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "table": {
+            "type": "object",
+            "properties": {
+                "straightUp": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "split": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "split3": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "street": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "corner": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "first4": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "first5": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "line": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "column": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "dozen": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "outside": {
+                    "$ref": "#/$defs/tableLimitType"
+                },
+                "totalInside": {
+                    "$ref": "#/$defs/tableLimitType"
+                }
+            }
+        },
+        "bets": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/betObject"
+            }
+        }
+    },
+    "$defs": {
+        "validPockets": {
+            "oneOf": [
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 36
+                },
+                {
+                    "type": "string",
+                    "pattern": "^([0-2]?[0-9]|3[0-6])$"
+                }
+            ]
+        },
+        "tableLimitType": {
+            "type": "object",
+            "properties": {
+                "min": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 1
+                },
+                "max": {
+                    "default": null,
+                    "oneOf": [
+                        {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            }
+        },
+        "betObject": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "enum": [
+                        "straightUp",
+                        "split",
+                        "split3",
+                        "street",
+                        "corner",
+                        "first4",
+                        "first5",
+                        "line",
+                        "column",
+                        "dozen",
+                        "outside",
+                        "neighbors1",
+                        "neighbors2",
+                        "neighbors3",
+                        "neighbors4",
+                        "neighbors5",
+                        "neighbors6",
+                        "neighbors7",
+                        "neighbors8",
+                        "neighbors9",
+                        "sector"
+                    ]
+                },
+                "wager": {
+                    "type": "integer",
+                    "minimum": 1
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "outside"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "location": {
+                                "enum": [
+                                    "black",
+                                    "even",
+                                    "high",
+                                    "low",
+                                    "odd",
+                                    "red"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "sector"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "location": {
+                                "enum": [
+                                    "tiers",
+                                    "voisins",
+                                    "orphelins",
+                                    "les orphelins",
+                                    "tiers du cylindre",
+                                    "les voisins du zero",
+                                    "orphelins en plein",
+                                    "orphelins en cheval",
+                                    "les orphelins en plein",
+                                    "les orphelins en cheval",
+                                    "jeu zero"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "pattern": "^first[45]$"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "location": {
+                                "oneOf": [
+                                    {
+                                        "type": "null"
+                                    },
+                                    {
+                                        "enum": [
+                                            0,
+                                            1,
+                                            2,
+                                            3,
+                                            "0",
+                                            "1",
+                                            "2",
+                                            "3",
+                                            "00",
+                                            "01",
+                                            "02",
+                                            "03"
+                                        ]
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "enum": [
+                                                0,
+                                                1,
+                                                2,
+                                                3,
+                                                "0",
+                                                "1",
+                                                "2",
+                                                "3",
+                                                "00",
+                                                "01",
+                                                "02",
+                                                "03",
+                                                null
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "pattern": "^(straightUp|neighbors[1-9])$"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "location": {
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/$defs/validPockets"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "minItems": 1,
+                                        "maxItems": 1,
+                                        "items": {
+                                            "$ref": "#/$defs/validPockets"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "not": {
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "const": "outside"
+                                        }
+                                    }
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "const": "sector"
+                                        }
+                                    }
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "pattern": "^(first[45]|straightUp|neighbors[1-9])$"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "location": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": {
+                                    "$ref": "#/$defs/validPockets"
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            "required": [
+                "type",
+                "wager",
+                "location"
+            ]
+        }
+    }
+}
