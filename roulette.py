@@ -1,9 +1,11 @@
+import sys
+sys.path.insert(0, 'src/vendor')
 from enum import Enum
+from wheel import Wheel as RouletteWheel
+from table import Table as RouletteTable
 import json
 import jsonschema
 import secrets
-from wheel import Wheel as RouletteWheel
-from table import Table as RouletteTable
 
 
 class RouletteEngine(object):
