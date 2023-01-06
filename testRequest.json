@@ -1,5 +1,5 @@
 {
-    "wheel": "American",
+    "wheel": "European",
     "table": {
         "straightUp": {"min": 1, "max": 50},
         "split": {"max": 100},
@@ -35,7 +35,7 @@
             {"type": "split", "wager": 1, "location": [14,11]},
             {"type": "split", "wager": 1, "location": [23,26]},
             {"type": "split", "wager": 1, "location": [24,27]},
-            {"type": "split", "wager": 1, "location": [25,26]},
+            {"type": "split", "wager": 1, "location": ["25",26]},
             {"type": "split", "wager": 1, "location": [25,28]},
             {"type": "split", "wager": 1, "location": [26,27]},
             {"type": "split", "wager": 1, "location": [26,29]},
@@ -58,6 +58,22 @@
             {"type": "neighbors7", "wager": 15, "location": [25]},
             {"type": "neighbors8", "wager": 17, "location": [25]},
             {"type": "neighbors9", "wager": 19, "location": [25]},
+            {"type": "outside", "wager": 19, "location": "red"},
+            {"type": "outside", "wager": 19, "location": "black"},
+            {"type": "outside", "wager": 19, "location": "even"},
+            {"type": "outside", "wager": 19, "location": "odd"},
+            {"type": "outside", "wager": 19, "location": "high"},
+            {"type": "outside", "wager": 19, "location": "low"},
+            {"type": "sector", "wager": 6, "location": "tiers"},
+            {"type": "sector", "wager": 9, "location": "voisins"},
+            {"type": "sector", "wager": 5, "location": "orphelins"},
+            {"type": "sector", "wager": 5, "location": "les orphelins"},
+            {"type": "sector", "wager": 6, "location": "tiers du cylindre"},
+            {"type": "sector", "wager": 9, "location": "les voisins du zero"},
+            {"type": "sector", "wager": 8, "location": "orphelins en plein"},
+            {"type": "sector", "wager": 5, "location": "orphelins en cheval"},
+            {"type": "sector", "wager": 4, "location": "jeu zero"},
+            {"type": "first5", "wager": 1, "location": null},
             {"type": "street", "wager": 1, "location": [28]}
     ]
 }

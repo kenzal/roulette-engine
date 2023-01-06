@@ -1,6 +1,7 @@
+import collections
+
 from wheel import Wheel, Pocket
 import re
-import numpy as np
 from dataclasses import dataclass
 
 
@@ -85,7 +86,7 @@ class Table(object):
 
     def get_outcome_by_type_location(self, type: str, location):
         if type == "straightUp":
-            return self.get_outcome(str(location) if np.isscalar(location) else str(location[0]))
+            return self.get_outcome(str(location) if (isinstance(location, int) or isinstance(location, str)) else str(location.pop()))
         elif type == "outside":
             return self.get_outcome(location.capitalize())
         elif type in ['first4', 'first5']:
@@ -97,7 +98,7 @@ class Table(object):
         else:
             raise UnableToDetermineBet(type=type, location=location)
         # secondPass = [val for key, val in firstPass.items() if location & ]
-        pocket_numbers = list(map(lambda x: 37 if x == '00' else x, location))
+        pocket_numbers = list(map(lambda x: 37 if x == '00' else int(x), location))
         pockets = list({val for key, val in enumerate(self.pockets) if key in pocket_numbers})
         if len(pockets) != len(location):
             missing = set(map(lambda x: '00' if x == 37 else x, pocket_numbers)) - set(range(0, len(self.pockets)))
