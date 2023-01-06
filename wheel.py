@@ -19,14 +19,32 @@ class Wheel(Enum):
                 22, 18, 29, 7, 28, 12, 35, 3, 26]
 
     @staticmethod
-    def get_red():
-        return [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
-
-    @staticmethod
     def get_black():
         return [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
+
+    @staticmethod
+    def get_red():
+        return [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 
     def get_green(self):
         if self == self.AMERICAN:
             return [0, 37]
         return [0]
+
+    def get_track_str(self):
+        return self._pocket_numbers_to_str(self.get_track())
+
+    def get_green_str(self):
+        return self._pocket_numbers_to_str(self.get_green())
+
+    @classmethod
+    def get_black_str(cls):
+        return cls._pocket_numbers_to_str(cls.get_black())
+
+    @classmethod
+    def get_red_str(cls):
+        return cls._pocket_numbers_to_str(cls.get_red())
+
+    @staticmethod
+    def _pocket_numbers_to_str(lst):
+        return list(map(lambda x: '00' if x == 37 else str(x), lst))
