@@ -1,5 +1,3 @@
-import collections
-
 from wheel import Wheel, Pocket
 import re
 from dataclasses import dataclass
@@ -33,25 +31,27 @@ class Table(object):
         self.winner = None
 
         build_pockets(self)
-        # Standard Bets
-        self.bets = [Bet(table=self, **bet) for bet in bets if
-                     not (re.match(Bet.NeighborsRegEx, bet['type']) or bet['type'] == 'sector')] if bets else {}
+        self.bets = []
+        if bets:
+            # Standard Bets
+            self.bets += [Bet(table=self, **bet) for bet in bets if
+                          not (re.match(Bet.NeighborsRegEx, bet['type']) or bet['type'] == 'sector')] if bets else {}
 
-        # Neighbors Bets
-        neighbors_bets = [Bet.from_neighbors(table=self, **bet) for bet in bets if
-                          re.match(Bet.NeighborsRegEx, bet['type'])]
-        self.bets += [inner for outer in neighbors_bets for inner in outer]
+            # Neighbors Bets
+            neighbors_bets = [Bet.from_neighbors(table=self, **bet) for bet in bets if
+                              re.match(Bet.NeighborsRegEx, bet['type'])]
+            self.bets += [inner for outer in neighbors_bets for inner in outer]
 
-        # Sector Bets
-        sector_bets = [Bet.from_sector(table=self, **bet) for bet in bets if bet['type'] == 'sector']
-        self.bets += [inner for outer in sector_bets for inner in outer]
+            # Sector Bets
+            sector_bets = [Bet.from_sector(table=self, **bet) for bet in bets if bet['type'] == 'sector']
+            self.bets += [inner for outer in sector_bets for inner in outer]
 
-        inside_wager = sum([bet.wager for bet in self.bets if bet.type not in ["column", "dozen", "outside"]])
+            inside_wager = sum([bet.wager for bet in self.bets if bet.type not in ["column", "dozen", "outside"]])
 
-        if inside_wager and inside_wager < self.limits["totalInside"].min:
-            raise InsideBetsTooSmall(inside_wager, self.limits["totalInside"].min)
-        if self.limits["totalInside"].max and inside_wager > self.limits["totalInside"].max:
-            raise InsideBetsTooLarge(inside_wager, self.limits["totalInside"].max)
+            if inside_wager and inside_wager < self.limits["totalInside"].min:
+                raise InsideBetsTooSmall(inside_wager, self.limits["totalInside"].min)
+            if self.limits["totalInside"].max and inside_wager > self.limits["totalInside"].max:
+                raise InsideBetsTooLarge(inside_wager, self.limits["totalInside"].max)
 
     @staticmethod
     def get_defaults():
@@ -86,7 +86,8 @@ class Table(object):
 
     def get_outcome_by_type_location(self, type: str, location):
         if type == "straightUp":
-            return self.get_outcome(str(location) if (isinstance(location, int) or isinstance(location, str)) else str(location.pop()))
+            return self.get_outcome(str(location) if
+                                    (isinstance(location, int) or isinstance(location, str)) else str(location.pop()))
         elif type == "outside":
             return self.get_outcome(location.capitalize())
         elif type in ['first4', 'first5']:
