@@ -44,10 +44,10 @@ class RouletteEngine(object):
     def get_json_dict(self):
         members = dict_filter(self.__dict__, {"hash", "success", "wager"})
         additional = {
-            'bets': self.table.bets,
-            'table': self.table.limits,
-            'winner': self.table.winner,
-            'wheel': self.table.wheel,
+            'bets':        self.table.bets,
+            'table':       self.table.limits,
+            'winner':      self.table.winner,
+            'wheel':       self.table.wheel,
             'winningBets': list(bet for bet in self.table.bets if bet.win),
         }
         return {**members, **additional}
@@ -61,7 +61,6 @@ class RouletteEngine(object):
 
 def dict_filter(haystack, needles):
     return dict([(i, haystack[i]) for i in haystack if i in set(needles)])
-
 
 
 with open('RouletteRequestSchema.json') as f:
