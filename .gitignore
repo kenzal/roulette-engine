@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 /roulette/jsonschema/
 .idea/
+.DS_Store

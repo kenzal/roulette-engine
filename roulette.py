@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(0, 'src/vendor')
 from enum import Enum
 from wheel import Wheel as RouletteWheel
 from table import Table as RouletteTable
@@ -64,8 +63,9 @@ def dict_filter(haystack, needles):
     return dict([(i, haystack[i]) for i in haystack if i in set(needles)])
 
 
-schemaFile = open('RouletteRequestSchema.json')
-requestSchema = json.load(schemaFile)
+
+with open('RouletteRequestSchema.json') as f:
+    requestSchema = json.load(f)
 
 
 def process_request(request):

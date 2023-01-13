@@ -24,7 +24,7 @@ class TableLimit(object):
 class Table(object):
     def __init__(self, wheel: Wheel, limits=None, bets=None):
         self.wheel = wheel
-        self.pockets = tuple(Pocket() for _ in range(len(self.wheel.get_track())))
+        self.pockets = tuple(Pocket() for _ in self.wheel.get_track())
         self.limits = self.get_defaults().copy()
         self.limits.update({k: TableLimit(**v) for k, v in limits.items()} if limits else {})
         self.outcomes = {}
